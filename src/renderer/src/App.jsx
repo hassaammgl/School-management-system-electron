@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { pageContext } from "./context/pageContext";
 import { Header } from "./components";
-import { Display, Home, Signup, Login } from "./pages";
+import { Display, Home, SuperAdminSignup, SuperAdminLogin } from "./pages";
 
 function App() {
-  const [page, setPage] = useState("Login");
+  const [page, setPage] = useState("SuperAdminSignup");
 
   return (
     <pageContext.Provider value={{ page, setPage }}>
@@ -12,8 +12,8 @@ function App() {
       <Display
         pages={[
           { title: "Home", component: Home },
-          { title: "SignUpAdmin", component: Signup },
-          { title: "LoginAdmin", component: Login },
+          { title: "SuperAdminSignup", component: SuperAdminSignup },
+          { title: "SuperAdminLogin", component: SuperAdminLogin },
         ]}
       />
     </pageContext.Provider>

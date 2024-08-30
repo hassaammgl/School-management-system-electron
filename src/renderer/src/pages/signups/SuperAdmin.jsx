@@ -22,10 +22,10 @@ import { MdOutlinePassword } from "react-icons/md";
 import { IoMdPerson } from "react-icons/io";
 import { FaPhone } from "react-icons/fa6";
 import { BiSolidBabyCarriage } from "react-icons/bi";
-import { pageContext } from "../context/pageContext";
-import LinkButton from "../components/LinkButton";
+import { pageContext } from "../../context/pageContext";
+import { LinkButton } from "../../components";
 
-const Signup = () => {
+const SuperAdminSignup = () => {
   const [show, setShow] = useState(false);
   // cradentials
   const [role, setRole] = useState("Patient");
@@ -263,7 +263,7 @@ const Signup = () => {
         <Stack mt={4}>
           <Center>
             Already have an account?{" "}
-            <LinkButton colorScheme={"red"}>Login</LinkButton>
+            <LinkButton colorScheme={"red"}>SuperAdminLogin</LinkButton>
           </Center>
         </Stack>
       </Stack>
@@ -271,4 +271,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SuperAdminSignup;
