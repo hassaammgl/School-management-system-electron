@@ -1,0 +1,438 @@
+Here's a detailed overview of all the schemas in the school management system, along with explanations of their fields and relationships.
+
+### **1. Admin Schema**
+
+The **Admin Schema** defines the structure for administrators in the system, who have various roles to manage the system.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const AdminSchema = new Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: { type: String, enum: ['Super Admin', 'Admin'], default: 'Admin' },
+    createdAt: { type: Date, default: Date.now }
+});
+export default model('Admin', AdminSchema);
+```
+
+#### **Explanation:**
+- **name**: Admin's name.
+- **email**: Admin's email, unique across all admins.
+- **password**: Password for secure login.
+- **role**: Specifies the admin type: "Super Admin" or "Admin".
+- **createdAt**: Timestamp when the admin account was created.
+
+### **2. Student Schema**
+
+The **Student Schema** captures details of each student, including their academic and personal information.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const StudentSchema = new Schema({
+    name: { type: String, required: true },
+    rollNumber: { type: String, required: true, unique: true },
+    class: { type: Schema.Types.ObjectId, ref: 'Class', required: true },
+    parent: { type: Schema.Types.ObjectId, ref: 'Parent', required: true },
+    email: { type: String, required: true, unique: true },
+    dateOfBirth: { type: Date, required: true },
+    address: { type: String, required: true },
+    phone: { type: String },
+    healthRecords: [{ type: Schema.Types.ObjectId, ref: 'HealthRecord' }],
+    createdAt: { type: Date, default: Date.now }
+});
+export default model('Student', StudentSchema);
+```
+
+#### **Explanation:**
+- **name**: Student's full name.
+- **rollNumber**: Unique roll number for each student.
+- **class**: Reference to the student's class.
+- **parent**: Reference to the parent entity.
+- **email**: Unique email for the student.
+- **dateOfBirth**: Student's date of birth.
+- **address**: Student's residential address.
+- **phone**: Contact phone number.
+- **healthRecords**: List of health records associated with the student.
+- **createdAt**: Timestamp when the student was registered.
+
+### **3. Parent Schema**
+
+The **Parent Schema** stores information about the parents or guardians of the students.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const ParentSchema = new Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    phone: { type: String, required: true },
+    children: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
+    address: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
+});
+export default model('Parent', ParentSchema);
+```
+
+#### **Explanation:**
+- **name**: Parent or guardian's name.
+- **email**: Unique email for the parent.
+- **phone**: Contact number.
+- **children**: List of references to the parent's children (students).
+- **address**: Parent's residential address.
+- **createdAt**: Timestamp when the parent's data was created.
+
+### **4. Teacher Schema**
+
+The **Teacher Schema** details the teachers within the system, including their qualifications and classes they manage.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const TeacherSchema = new Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    phone: { type: String },
+    subjects: [{ type: Schema.Types.ObjectId, ref: 'Subject' }],
+    classes: [{ type: Schema.Types.ObjectId, ref: 'Class' }],
+    hireDate: { type: Date, default: Date.now },
+    qualifications: { type: String },
+    createdAt: { type: Date, default: Date.now }
+});
+export default model('Teacher', TeacherSchema);
+```
+
+#### **Explanation:**
+- **name**: Teacher's full name.
+- **email**: Unique email for the teacher.
+- **phone**: Contact phone number.
+- **subjects**: List of subjects the teacher is responsible for.
+- **classes**: Classes the teacher is assigned to.
+- **hireDate**: Date the teacher was hired.
+- **qualifications**: Academic qualifications.
+- **createdAt**: Timestamp when the teacher's data was created.
+
+### **5. Class Schema**
+
+The **Class Schema** defines the structure for classes within the school.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const ClassSchema = new Schema({
+    name: { type: String, required: true, unique: true }, // e.g., "10th Grade"
+    section: { type: String, required: true }, // e.g., "A", "B"
+    subjects: [{ type: Schema.Types.ObjectId, ref: 'Subject' }],
+    classTeacher: { type: Schema.Types.ObjectId, ref: 'Teacher' },
+    students: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
+    createdAt: { type: Date, default: Date.now }
+});
+export default model('Class', ClassSchema);
+```
+
+#### **Explanation:**
+- **name**: Name of the class.
+- **section**: Class section (like A, B, etc.).
+- **subjects**: List of subjects taught in this class.
+- **classTeacher**: Reference to the teacher in charge of the class.
+- **students**: List of students in the class.
+- **createdAt**: Timestamp when the class data was created.
+
+### **6. Subject Schema**
+
+The **Subject Schema** outlines details about the subjects taught in the school.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const SubjectSchema = new Schema({
+    name: { type: String, required: true, unique: true },
+    code: { type: String, unique: true },
+    syllabus: { type: Schema.Types.ObjectId, ref: 'Syllabus' },
+    createdAt: { type: Date, default: Date.now }
+});
+export default model('Subject', SubjectSchema);
+```
+
+#### **Explanation:**
+- **name**: Name of the subject.
+- **code**: Unique code for the subject.
+- **syllabus**: Reference to the syllabus for this subject.
+- **createdAt**: Timestamp when the subject data was created.
+
+### **7. Syllabus Schema**
+
+The **Syllabus Schema** holds details about the syllabus for each subject and class.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const SyllabusSchema = new Schema({
+    class: { type: Schema.Types.ObjectId, ref: 'Class', required: true },
+    subject: { type: Schema.Types.ObjectId, ref: 'Subject', required: true },
+    academicTerm: { type: String, required: true },
+    year: { type: Number, required: true },
+    topics: [{
+        topicTitle: { type: String, required: true },
+        description: { type: String },
+        week: { type: Number },
+        resources: [{ 
+            resourceType: { type: String, enum: ['Book', 'Article', 'Video', 'Website', 'Document'], required: true },
+            title: { type: String, required: true },
+            link: { type: String }
+        }],
+        assignments: [{ type: Schema.Types.ObjectId, ref: 'Assignment' }],
+        exams: [{ type: Schema.Types.ObjectId, ref: 'Exam' }]
+    }],
+    objectives: { type: String },
+    createdBy: { type: Schema.Types.ObjectId, ref: 'Teacher', required: true },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+export default model('Syllabus', SyllabusSchema);
+```
+
+#### **Explanation:**
+- **class**: Reference to the associated class.
+- **subject**: Reference to the associated subject.
+- **academicTerm**: Term for which the syllabus is applicable.
+- **year**: Academic year.
+- **topics**: List of topics covered, each with its own details.
+- **resources**: Resources for each topic (books, articles, etc.).
+- **assignments**: List of assignments linked to the topics.
+- **exams**: List of exams associated with the topics.
+- **objectives**: Overall objectives of the syllabus.
+- **createdBy**: Reference to the teacher who created the syllabus.
+- **createdAt** and **updatedAt**: Timestamps for creation and updates.
+
+### **8. Assignment Schema**
+
+The **Assignment Schema** details the assignments given to students.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const AssignmentSchema = new Schema({
+    title: { type: String, required: true },
+    description: { type: String },
+    dueDate: { type: Date, required: true },
+    class: { type: Schema.Types.ObjectId, ref: 'Class' },
+
+
+    subject: { type: Schema.Types.ObjectId, ref: 'Subject' },
+    createdBy: { type: Schema.Types.ObjectId, ref: 'Teacher', required: true },
+    submittedBy: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
+    status: { type: String, enum: ['Assigned', 'Submitted', 'Graded'], default: 'Assigned' },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+export default model('Assignment', AssignmentSchema);
+```
+
+#### **Explanation:**
+- **title**: Title of the assignment.
+- **description**: Brief description of the assignment.
+- **dueDate**: Deadline for submission.
+- **class**: Reference to the class assigned.
+- **subject**: Reference to the subject of the assignment.
+- **createdBy**: Reference to the teacher who created the assignment.
+- **submittedBy**: List of students who have submitted the assignment.
+- **status**: Status of the assignment (Assigned, Submitted, Graded).
+- **createdAt** and **updatedAt**: Timestamps for creation and updates.
+
+### **9. Exam Schema**
+
+The **Exam Schema** contains information about the exams.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const ExamSchema = new Schema({
+    title: { type: String, required: true },
+    description: { type: String },
+    date: { type: Date, required: true },
+    class: { type: Schema.Types.ObjectId, ref: 'Class', required: true },
+    subject: { type: Schema.Types.ObjectId, ref: 'Subject', required: true },
+    totalMarks: { type: Number, required: true },
+    createdBy: { type: Schema.Types.ObjectId, ref: 'Teacher', required: true },
+    results: [{ 
+        student: { type: Schema.Types.ObjectId, ref: 'Student' },
+        marksObtained: { type: Number }
+    }],
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+export default model('Exam', ExamSchema);
+```
+
+#### **Explanation:**
+- **title**: Name of the exam.
+- **description**: Description or purpose of the exam.
+- **date**: Date when the exam will take place.
+- **class**: Class for which the exam is scheduled.
+- **subject**: Subject of the exam.
+- **totalMarks**: Maximum marks for the exam.
+- **createdBy**: Teacher who created the exam.
+- **results**: List of results for each student.
+- **createdAt** and **updatedAt**: Timestamps for creation and updates.
+
+### **10. Event Schema**
+
+The **Event Schema** manages the school events and activities.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const EventSchema = new Schema({
+    title: { type: String, required: true },
+    description: { type: String },
+    date: { type: Date, required: true },
+    location: { type: String },
+    participants: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
+    createdBy: { type: Schema.Types.ObjectId, ref: 'Admin', required: true },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+export default model('Event', EventSchema);
+```
+
+#### **Explanation:**
+- **title**: Name of the event.
+- **description**: Description or details of the event.
+- **date**: Scheduled date for the event.
+- **location**: Venue of the event.
+- **participants**: List of participating students.
+- **createdBy**: Admin who created the event.
+- **createdAt** and **updatedAt**: Timestamps for creation and updates.
+
+### **11. Notification Schema**
+
+The **Notification Schema** handles notifications sent to various users.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const NotificationSchema = new Schema({
+    message: { type: String, required: true },
+    recipientType: { type: String, enum: ['Student', 'Teacher', 'Parent', 'Admin'], required: true },
+    recipients: [{ type: Schema.Types.ObjectId, refPath: 'recipientType' }],
+    sentBy: { type: Schema.Types.ObjectId, ref: 'Admin' },
+    sentAt: { type: Date, default: Date.now }
+});
+export default model('Notification', NotificationSchema);
+```
+
+#### **Explanation:**
+- **message**: Notification content.
+- **recipientType**: Type of recipient (Student, Teacher, Parent, Admin).
+- **recipients**: List of recipients based on the recipient type.
+- **sentBy**: Admin who sent the notification.
+- **sentAt**: Timestamp when the notification was sent.
+
+### **12. Library Schema**
+
+The **Library Schema** stores the library's data, including book details and issued books.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const BookSchema = new Schema({
+    title: { type: String, required: true },
+    author: { type: String, required: true },
+    ISBN: { type: String, unique: true, required: true },
+    genre: { type: String, required: true },
+    publisher: { type: String },
+    publishedYear: { type: Number },
+    language: { type: String, default: 'English' },
+    pages: { type: Number },
+    copies: { 
+        totalCopies: { type: Number, required: true },
+        availableCopies: { type: Number, required: true }
+    },
+    location: { 
+        shelf: { type: String },
+        aisle: { type: String }
+    },
+    issuedTo: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+export default model('Book', BookSchema);
+```
+
+#### **Explanation:**
+- **title**: Title of the book.
+- **author**: Author of the book.
+- **ISBN**: Unique book identifier.
+- **genre**: Genre/category of the book.
+- **publisher**: Publisher's name.
+- **publishedYear**: Year of publication.
+- **language**: Language of the book.
+- **pages**: Number of pages.
+- **copies**: Total and available copies.
+- **location**: Physical location of the book in the library.
+- **issuedTo**: List of students who borrowed the book.
+- **createdAt** and **updatedAt**: Timestamps for creation and updates.
+
+### **13. Campus Schema**
+
+The **Campus Schema** represents different campuses in a high school organization.
+
+```javascript
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+const CampusSchema = new Schema({
+    campusName: { type: String, required: true, unique: true },
+    address: {
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        state: { type: String, required: true },
+        zipCode: { type: String, required: true },
+        country: { type: String, default: 'USA' }
+    },
+    contact: {
+        phone: { type: String, required: true },
+        email: { type: String, required: true }
+    },
+    facilities: [{ type: String }],
+    departments: [{ type: Schema.Types.ObjectId, ref: 'Department' }],
+    principal: { type: Schema.Types.ObjectId, ref: 'Admin' },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+export default model('Campus', CampusSchema);
+```
+
+#### **Explanation:**
+- **campusName**: Unique name of the campus.
+- **address**: Physical address of the campus.
+- **contact**: Contact information for the campus.
+- **facilities**: Available facilities at the campus.
+- **departments**: References to departments in the campus.
+- **principal**: Reference to the principal (admin) of the campus.
+- **createdAt** and **updatedAt**: Timestamps for creation and updates.
+
+### Additional Schemas (if needed):
+- **HealthRecord Schema**: To manage health records of students.
+- **Transport Schema**: To manage transport details.
+- **Inventory Schema**: To manage school inventory (supplies, equipment).
+- **Hostel Schema**: To manage hostel facilities.
+
+These schemas form the backbone of the school management system, allowing for comprehensive management of students, teachers, classes, events, library, and more.
+
+Would you like to add any more details or further clarify any parts?
