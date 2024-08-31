@@ -2,29 +2,28 @@ import {
   Stack,
   Heading,
   Menu,
-  Box,
   Flex,
   MenuButton,
   MenuList,
   MenuItem,
-  Button
-} from '@chakra-ui/react'
-import { ChevronDownIcon } from '@chakra-ui/icons'
-import { BiHome } from 'react-icons/bi'
-import { LuWorkflow } from 'react-icons/lu'
-import { FaUserDoctor } from 'react-icons/fa6'
-import { AiOutlineSchedule } from 'react-icons/ai'
-import { MdOutlineAdminPanelSettings } from 'react-icons/md'
+  Button,
+} from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { BiHome } from "react-icons/bi";
+import { LuWorkflow } from "react-icons/lu";
+import { FaUserDoctor } from "react-icons/fa6";
+import { AiOutlineSchedule } from "react-icons/ai";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 const Admin = () => {
   return (
-    <Stack width={'100%'} height={'100vh'}>
-      <Flex flexWrap={'wrap'}></Flex>
+    <Stack width={"100%"} height={"100vh"}>
+      <Flex flexWrap={"wrap"}></Flex>
     </Stack>
-  )
-}
+  );
+};
 
-export default Admin
+export default Admin;
 
 export const AdminOptions = () => {
   return (
@@ -41,7 +40,11 @@ export const AdminOptions = () => {
         </MenuButton>
       </Menu>
       <Menu>
-        <MenuButton as={Button} leftIcon={<FaUserDoctor />} rightIcon={<ChevronDownIcon />}>
+        <MenuButton
+          as={Button}
+          leftIcon={<FaUserDoctor />}
+          rightIcon={<ChevronDownIcon />}
+        >
           Doctors
         </MenuButton>
         <MenuList>
@@ -67,7 +70,11 @@ export const AdminOptions = () => {
         </MenuList>
       </Menu>
       <Menu>
-        <MenuButton as={Button} leftIcon={<AiOutlineSchedule />} rightIcon={<ChevronDownIcon />}>
+        <MenuButton
+          as={Button}
+          leftIcon={<AiOutlineSchedule />}
+          rightIcon={<ChevronDownIcon />}
+        >
           Schedules
         </MenuButton>
         <MenuList>
@@ -76,7 +83,11 @@ export const AdminOptions = () => {
         </MenuList>
       </Menu>
       <Menu>
-        <MenuButton as={Button} leftIcon={<AiOutlineSchedule />} rightIcon={<ChevronDownIcon />}>
+        <MenuButton
+          as={Button}
+          leftIcon={<AiOutlineSchedule />}
+          rightIcon={<ChevronDownIcon />}
+        >
           Appointments
         </MenuButton>
         <MenuList>
@@ -87,5 +98,5 @@ export const AdminOptions = () => {
         </MenuList>
       </Menu>
     </Stack>
-  )
-}
+  );
+};
