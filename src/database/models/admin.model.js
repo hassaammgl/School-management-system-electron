@@ -57,7 +57,8 @@ const AdminSchema = new Schema({
     },
   ],
 });
-export default model("Admin", AdminSchema);
+
+export const Admin = mongoose.model("Admin", AdminSchema);
 
 // #### **Explanation:**
 // - **name**: Admin's name.
