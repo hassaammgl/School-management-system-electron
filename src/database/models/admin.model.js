@@ -49,7 +49,10 @@ const AdminSchema = new Schema({
     type: Date || String,
     default: moment().format("MMMM Do YYYY, h:mm:ss a") || Date.now,
   },
-  updatedAt: { type: Date || String, default: Date.now },
+  updatedAt: {
+    type: Date || String,
+    default: moment().format("MMMM Do YYYY, h:mm:ss a") || Date.now,
+  },
   lastLogin: [
     {
       type: String,
@@ -57,8 +60,7 @@ const AdminSchema = new Schema({
     },
   ],
 });
-
-export const Admin = mongoose.model("Admin", AdminSchema);
+export const Admin = model("Admin", AdminSchema);
 
 // #### **Explanation:**
 // - **name**: Admin's name.
